@@ -3,6 +3,7 @@ module.exports = async function (interaction) {
         embeds: [
             {
                 title: 'Create a ticket :tickets:',
+                description: 'Choose the option that best describes your issue.',
                 color: 5094616,
             },
         ],
