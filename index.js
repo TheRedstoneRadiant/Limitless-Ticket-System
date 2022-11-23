@@ -29,30 +29,22 @@ client.on('interactionCreate', async (interaction) => {
 			);
 		}
 	} else if (interaction.isButton()) {
-		try {
-			await require(`./bot/buttons/${interaction.customId}`)(interaction);
-		} catch (error) {
-			console.log(
-				`❌ Unable to execute ${interaction.customId} button. \n` + error
-			);
+		if (interaction.customId.startsWith("ticket_")) {
+			try {
+				await require(`./bot/buttons/create_ticket`)(interaction);
+			} catch (error) {
+				console.log(
+					`❌ Unable to execute ${interaction.customId} button. \n` + error
+				);
+			}
+		} else {
+			try {
+				await require(`./bot/buttons/${interaction.customId}`)(interaction);
+			} catch (error) {
+				console.log(
+					`❌ Unable to execute ${interaction.customId} button. \n` + error
+				);
+			}
 		}
 	}
-});
-
-client.on("guildMemberAdd", async (member) => {
-	const channel = await member.guild.channels.create({
-		name: `${member.user.username}`,
-		permissionOverwrites: [
-			{
-				id: member.guild.roles.everyone.id,
-				deny: ['ViewChannel'],
-			},
-			{
-				id: member.id,
-				allow: ['ViewChannel']
-			}
-		],
-	});
-
-	channel.send("@everyone");
 });

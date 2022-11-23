@@ -2,12 +2,8 @@ module.exports = async function (interaction) {
     await interaction.channel.send({
         embeds: [
             {
-                title: 'Create a ticket :ticket:',
-                footer: {
-                    iconURL: "https://i.imgur.com/kY65sQa.png",
-                    text: 'Limitless Reloaded',
-                },
-                color: 3293948,
+                title: 'Create a ticket :tickets:',
+                color: 5094616,
             },
         ],
         components: [
@@ -57,7 +53,7 @@ module.exports = async function (interaction) {
                     iconURL: "https://i.imgur.com/kY65sQa.png",
                     text: 'Limitless Reloaded',
                 },
-                color: 3293948
+                color: 5094616
             },
         ],
         ephemeral: true
