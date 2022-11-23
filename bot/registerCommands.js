@@ -3,7 +3,11 @@ const { Client } = require("discord.js");
 const client = new Client({ intents: 0 });
 
 const commands = [
-
+    {
+        "name": "createticketprompt",
+        "description": "Create the prompt for making tickets.",
+        "options": []
+    }
 ];
 
 client.once("ready", async () => {

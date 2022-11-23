@@ -60,5 +60,6 @@ module.exports = async function (interaction) {
                 color: 3293948
             },
         ],
+        ephemeral: true
     })
 }
