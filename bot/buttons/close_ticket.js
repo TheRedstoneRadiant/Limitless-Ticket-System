@@ -34,5 +34,6 @@ module.exports = async function (interaction) {
                 ],
             },
         ],
-    });    
+        ephemeral: true
+    });
 }
