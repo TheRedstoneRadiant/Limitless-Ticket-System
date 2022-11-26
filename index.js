@@ -37,7 +37,7 @@ client.on('interactionCreate', async (interaction) => {
 				return await require(`./bot/buttons/create_ticket`)(interaction);
 			}
 			
-			// All other buttons :)
+			// All other buttons
 			await require(`./bot/buttons/${interaction.customId}`)(interaction);
 		} catch (error) {
 			console.log(`❌ Unable to execute ${interaction.customId} button. \n` + error);

@@ -1,5 +1,5 @@
 module.exports = async function (interaction) {
-    // 
+    // Send confirmation embed
     await interaction.reply({
         embeds: [
             {

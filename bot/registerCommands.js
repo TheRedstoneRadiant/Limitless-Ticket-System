@@ -3,7 +3,7 @@
 // Imports
 const { Client } = require("discord.js");
 
-// Predefined command list
+// Predefined command array
 const commands = [
     {
         "name": "createticketprompt",
