@@ -14,7 +14,7 @@ module.exports = async function (interaction) {
                     {
                         type: 2,
                         label: '',
-                        style: 2,
+                        style: 4,
                         emoji: {
                             id: null,
                             name: "✅"
