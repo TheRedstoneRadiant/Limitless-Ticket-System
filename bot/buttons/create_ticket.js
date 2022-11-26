@@ -5,7 +5,7 @@ const ticketType = {
 };
 
 module.exports = async function (interaction) {
-    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.name === `${ticketType[interaction.customId]}-${interaction.user.username}`.toLowerCase());
+    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.name === `${ticketType[interaction.customId]}-${interaction.user.id}`.toLowerCase());
     if (existingTicketChannel) {
         return await interaction.reply({
             embeds: [
@@ -19,32 +19,23 @@ module.exports = async function (interaction) {
         });
     }
 
-    const channel = await interaction.guild.channels.create({
-		name: `${ticketType[interaction.customId]}-${interaction.user.username}`,
-		permissionOverwrites: [
-			{
-				id: interaction.guild.roles.everyone.id,
-				deny: ['ViewChannel'],
-			},
-			{
-				id: interaction.user.id,
-				allow: ['ViewChannel']
-			}
-		],
-	});
+    const ticketName = `${ticketType[interaction.customId]}-${interaction.user.username}`;
 
-    await interaction.reply({
-        embeds: [
+    const channel = await interaction.guild.channels.create({
+        name: ticketName,
+        permissionOverwrites: [
             {
-                title: 'Ticket Created!',
-                description: `<#${channel.id}>`,
-                color: 5094616,
+                id: interaction.guild.roles.everyone.id,
+                deny: ['ViewChannel'],
             },
+            {
+                id: interaction.user.id,
+                allow: ['ViewChannel']
+            }
         ],
-        ephemeral: true
     });
 
-	await channel.send({
+    await channel.send({
         embeds: [
             {
                 title: 'Close Ticket',
@@ -70,4 +61,8 @@ module.exports = async function (interaction) {
             },
         ],
     });
+
+    // Ping user
+    channel.send(`<@${interaction.user.id}>`)
+        .then(m => m.delete());
 }
