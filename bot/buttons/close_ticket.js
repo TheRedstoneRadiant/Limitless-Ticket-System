@@ -20,16 +20,6 @@ module.exports = async function (interaction) {
                             name: "✅"
                         },
                         custom_id: "confirm_close_ticket"
-                    },
-                    {
-                        type: 2,
-                        label: '',
-                        style: 2,
-                        emoji: {
-                            id: null,
-                            name: "❌"
-                        },
-                        custom_id: "cancel_close_ticket"
                     }
                 ],
             },
