@@ -10,7 +10,7 @@ client.on("ready", () => {
 	console.log('✅ Connected to Discord.');
 
 	client.user.setActivity({
-		name: `the ticket stall <3`,
+		name: `Your Tickets`,
 		type: 3,
 	});
 });
