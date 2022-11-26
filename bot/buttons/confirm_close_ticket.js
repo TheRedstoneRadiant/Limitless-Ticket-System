@@ -1,3 +1,5 @@
+const { client } = require("../../index");
+
 const dmMessage = {
     content: "If you need any additional information or are still interested, send a DM to JohnWick#0002 or re-join Limitless Services here → https://discord.gg/7eEFyHnexS",
     embeds: [
@@ -14,7 +16,8 @@ Feel free to reach out to me directly with any urgent matters. @JohnWick#0002`,
 
 module.exports = async function (interaction) {
     try {
-        await interaction.user.send(dmMessage);
+        const ticketOwner = await client.users.fetch(interaction.channel.topic, false);
+        await ticketOwner.send(dmMessage);
     } catch {
         // Unable to DM message
     };
