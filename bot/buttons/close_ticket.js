@@ -4,6 +4,7 @@ const dmMessage = {
     content: "If you need any additional information or are still interested, send a DM to JohnWick#0002 or re-join Limitless Services here → https://discord.gg/7eEFyHnexS",
     embeds: [
         {
+            url: 'https://discord.gg/7eEFyHnexS',
             title: 'CLICK HERE to Get Back to Limitless Services',
             description: `Thanks for your interest with Limitless Services.
 
@@ -11,7 +12,7 @@ const dmMessage = {
 Feel free to reach out to me directly with any urgent matters. @JohnWick#0002`,
             color: 5094616,
             footer: {
-                iconURL: "https://i.imgur.com/kY65sQa.png",
+                iconURL: 'https://i.imgur.com/kY65sQa.png',
                 text: 'Limitless Reloaded',
             },
             timestamp: new Date().toISOString()
