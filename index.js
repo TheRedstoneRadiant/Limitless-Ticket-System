@@ -29,7 +29,7 @@ client.on('interactionCreate', async (interaction) => {
 			console.log(`❌ Unable to execute ${interaction.commandName} command. \n` + error);
 		}
 	}
-	
+
 	// Buttons
 	else if (interaction.isButton()) {
 		try {
@@ -37,7 +37,7 @@ client.on('interactionCreate', async (interaction) => {
 			if (interaction.customId.startsWith("ticket_")) {
 				return await require(`./bot/buttons/create_ticket`)(interaction);
 			}
-			
+
 			// All other buttons
 			await require(`./bot/buttons/${interaction.customId}`)(interaction);
 		} catch (error) {
@@ -46,5 +46,12 @@ client.on('interactionCreate', async (interaction) => {
 	};
 });
 
-// Export bot
-module.exports = { client };
+// Connect to MongoDB
+const mongoClient = new MongoClient(process.env["MONGODB_URI"], { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+// Mongo Collections
+const db = mongoClient.db(process.env["MONGO_DATABASE"]);
+const faqCollection = db.collection("faqCollection");
+
+// Exports
+module.exports = { client, faqCollection };
