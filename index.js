@@ -1,5 +1,6 @@
 // Imports
 const { Client } = require("discord.js");
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 // Initialize Bot
 const client = new Client({
