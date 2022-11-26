@@ -5,12 +5,12 @@ const ticketType = {
 };
 
 module.exports = async function (interaction) {
-    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.name === `${ticketType[interaction.customId]}-${interaction.user.id}`.toLowerCase());
+    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.topic == interaction.user.id);
     if (existingTicketChannel) {
         return await interaction.reply({
             embeds: [
                 {
-                    title: `You already have an open ${ticketType[interaction.customId]} ticket!`,
+                    title: `You already have an open ticket!`,
                     description: `<#${existingTicketChannel.id}>`,
                     color: 5094616,
                 },
@@ -23,6 +23,7 @@ module.exports = async function (interaction) {
 
     const channel = await interaction.guild.channels.create({
         name: ticketName,
+        topic: interaction.user.id,
         permissionOverwrites: [
             {
                 id: interaction.guild.roles.everyone.id,
