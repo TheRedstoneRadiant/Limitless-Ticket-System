@@ -1,7 +1,9 @@
+// Registers slash commands with the Discord API.
+
+// Imports
 const { Client } = require("discord.js");
 
-const client = new Client({ intents: 0 });
-
+// Predefined command list
 const commands = [
     {
         "name": "createticketprompt",
@@ -10,15 +12,24 @@ const commands = [
     }
 ];
 
+// Initialize bot
+const client = new Client({ intents: 0 });
+
+// Login
+client.login(process.env["DISCORD_TOKEN"]);
+
 client.once("ready", async () => {
     console.log("✅ Connected to Discord.");
 
+    // Iterate over commands array
     for (const command of commands) {
-        const createdCommand = await client.application.commands.create(command);
-        console.log(`✅ Created /${createdCommand.name}`);
+        // Register slash command
+        client.application.commands.create(command)
+            .then(createdCommand => {
+                console.info(`✅ Created /${createdCommand.name}`);
+            });
     };
 
+    // Success
     process.exit(0);
 });
-
-client.login(process.env["DISCORD_TOKEN"]);

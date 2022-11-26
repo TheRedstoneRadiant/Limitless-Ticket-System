@@ -1,3 +1,4 @@
+// Map buttons to ticket names
 const ticketType = {
     "ticket_pricing": "Pricing",
     "ticket_support": "Support",
@@ -5,6 +6,7 @@ const ticketType = {
 };
 
 module.exports = async function (interaction) {
+    // Find existing ticket by channel topic
     const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.topic == interaction.user.id);
     if (existingTicketChannel) {
         return await interaction.reply({
@@ -12,22 +14,17 @@ module.exports = async function (interaction) {
                 {
                     title: `You already have an open ticket!`,
                     description: `<#${existingTicketChannel.id}>`,
-                    color: 5094616,
-                    footer: {
-                        iconURL: "https://i.imgur.com/kY65sQa.png",
-                        text: 'Limitless Reloaded',
-                    }
+                    color: 5094616
                 },
             ],
             ephemeral: true
         });
     }
 
-    const ticketName = `${ticketType[interaction.customId]}-${interaction.user.username}`;
-
+    // Create ticket channel
     const channel = await interaction.guild.channels.create({
-        name: ticketName,
-        topic: interaction.user.id,
+        name: `${ticketType[interaction.customId]}-${interaction.user.username}`,
+        topic: interaction.user.id,  // Channel topic: User ID
         permissionOverwrites: [
             {
                 id: interaction.guild.roles.everyone.id,
@@ -40,6 +37,14 @@ module.exports = async function (interaction) {
         ],
     });
 
+    // Defer interaction
+    interaction.deferUpdate();
+
+    // Ping user
+    channel.send(`<@${interaction.user.id}>`)
+        .then(m => m.delete());
+
+    // Send ticket closure embed
     await channel.send({
         embeds: [
             {
@@ -66,10 +71,4 @@ module.exports = async function (interaction) {
             },
         ],
     });
-
-    interaction.deferUpdate();
-
-    // Ping user
-    channel.send(`<@${interaction.user.id}>`)
-        .then(m => m.delete());
 }

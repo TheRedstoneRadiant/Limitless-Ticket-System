@@ -1,4 +1,39 @@
+// Buttons for ticket prompt
+const ticketComponents = [
+    {
+        type: 2,
+        label: 'Pricing',
+        style: 1,
+        emoji: {
+            id: null,
+            name: "💸"
+        },
+        custom_id: "ticket_pricing"
+    },
+    {
+        type: 2,
+        label: 'Support',
+        style: 1,
+        emoji: {
+            id: null,
+            name: "❓"
+        },
+        custom_id: "ticket_support"
+    },
+    {
+        type: 2,
+        label: 'Report a bug',
+        style: 1,
+        emoji: {
+            id: null,
+            name: "🧐"
+        },
+        custom_id: "ticket_bugreport"
+    },
+];
+
 module.exports = async function (interaction) {
+    // Send ticket prompt
     await interaction.channel.send({
         embeds: [
             {
@@ -10,42 +45,12 @@ module.exports = async function (interaction) {
         components: [
             {
                 type: 1,
-                components: [
-                    {
-                        type: 2,
-                        label: 'Pricing',
-                        style: 1,
-                        emoji: {
-                            id: null,
-                            name: "💸"
-                        },
-                        custom_id: "ticket_pricing"
-                    },
-                    {
-                        type: 2,
-                        label: 'Support',
-                        style: 1,
-                        emoji: {
-                            id: null,
-                            name: "❓"
-                        },
-                        custom_id: "ticket_support"
-                    },
-                    {
-                        type: 2,
-                        label: 'Report a bug',
-                        style: 1,
-                        emoji: {
-                            id: null,
-                            name: "🧐"
-                        },
-                        custom_id: "ticket_bugreport"
-                    },
-                ],
+                components: ticketComponents
             },
         ],
     });
 
+    // Reply to interaction
     await interaction.reply({
         embeds: [
             {
