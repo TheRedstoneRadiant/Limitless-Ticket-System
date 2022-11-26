@@ -6,6 +6,7 @@
     "register": "env $(cat .env) node bot/registerCommands.js"
   },
   "dependencies": {
-    "discord.js": "^14.6.0"
+    "discord.js": "^14.6.0",
+    "mongodb": "^4.12.1"
   }
 }
