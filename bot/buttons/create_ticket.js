@@ -65,7 +65,7 @@ module.exports = async function (interaction) {
                             id: null,
                             name: "🔒"
                         },
-                        custom_id: "close_ticket"
+                        custom_id: "confirm_close_ticket"
                     }
                 ],
             },
