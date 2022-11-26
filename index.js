@@ -44,3 +44,5 @@ client.on('interactionCreate', async (interaction) => {
 		}
 	}
 });
+
+module.exports = { client };
