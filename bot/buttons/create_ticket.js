@@ -13,6 +13,10 @@ module.exports = async function (interaction) {
                     title: `You already have an open ticket!`,
                     description: `<#${existingTicketChannel.id}>`,
                     color: 5094616,
+                    footer: {
+                        iconURL: "https://i.imgur.com/kY65sQa.png",
+                        text: 'Limitless Reloaded',
+                    }
                 },
             ],
             ephemeral: true
@@ -62,6 +66,8 @@ module.exports = async function (interaction) {
             },
         ],
     });
+
+    interaction.deferUpdate();
 
     // Ping user
     channel.send(`<@${interaction.user.id}>`)

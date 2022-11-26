@@ -4,7 +4,7 @@ module.exports = async function (interaction) {
             {
                 title: 'Confirm',
                 description: 'Are you sure you want to close this ticket?',
-                color: 16711680,
+                color: 16711680
             },
         ],
         components: [

@@ -10,6 +10,11 @@ const dmMessage = {
 **Hope I could assist in whatever your goal was today!**
 Feel free to reach out to me directly with any urgent matters. @JohnWick#0002`,
             color: 5094616,
+            footer: {
+                iconURL: "https://i.imgur.com/kY65sQa.png",
+                text: 'Limitless Reloaded',
+            },
+            timestamp: new Date().toISOString()
         }
     ]
 };
