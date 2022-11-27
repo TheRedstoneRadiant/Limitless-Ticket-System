@@ -63,6 +63,8 @@ const mongoClient = new MongoClient(process.env["MONGODB_URI"], { useNewUrlParse
 // Mongo Collections
 const db = mongoClient.db(process.env["MONGO_DATABASE"]);
 const faqCollection = db.collection("faqCollection");
+const pricingCollection = db.collection("pricingCollection");
+const ticketCollection = db.collection("ticketCollection");
 
 // Exports
 module.exports = { client, faqCollection };
