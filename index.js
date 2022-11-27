@@ -43,7 +43,18 @@ client.on('interactionCreate', async (interaction) => {
 		} catch (error) {
 			console.log(`❌ Unable to execute ${interaction.customId} button. \n` + error);
 		}
-	};
+	}
+
+	// Select Menu
+	else if (interaction.isSelectMenu()) {
+		try {
+			await require(`./bot/select/${interaction.customId}`)(interaction);
+		} catch (error) {
+			console.log(
+				`❌ Unable to execute ${interaction.customId} select menu. \n` + error
+			);
+		}
+	}
 });
 
 // Connect to MongoDB

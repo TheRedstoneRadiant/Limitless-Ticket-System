@@ -7,8 +7,7 @@ const { Client } = require("discord.js");
 const commands = [
     {
         "name": "createticketprompt",
-        "description": "Create the prompt for making tickets.",
-        "options": []
+        "description": "Create ticket prompt.",
     }
 ];
 
@@ -29,7 +28,4 @@ client.once("ready", async () => {
                 console.info(`✅ Created /${createdCommand.name}`);
             });
     };
-
-    // Success
-    process.exit(0);
 });
