@@ -1,6 +1,22 @@
 const { faqCollection } = require("../../index");
 
 module.exports = async function (interaction) {
+    if (!interaction.member.permissions.has("ADMINISTRATOR")) {
+        return interaction.reply({
+            embeds: [
+                {
+                    title: '❌ You do not have permission to execute this command!',
+                    footer: {
+                        iconURL: "https://i.imgur.com/kY65sQa.png",
+                        text: 'Limitless Reloaded',
+                    },
+                    color: 5094616
+                },
+            ],
+            ephemeral: true
+        });
+    }
+
     // Generate FAQ select menu options
     let faqOptions = [];
 
