@@ -1,7 +1,7 @@
 const { faqCollection } = require("../../index");
 
 module.exports = async function (interaction) {
-    if (!interaction.member.permissions.has("ADMINISTRATOR")) {
+    if (!interaction.memberPermissions.has("Administrator")) {
         return interaction.reply({
             embeds: [
                 {
