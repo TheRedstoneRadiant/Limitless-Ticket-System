@@ -1,30 +1,32 @@
-// Map buttons to ticket names
-const ticketType = {
-    "ticket_pricing": "Pricing",
-    "ticket_support": "Support",
-    "ticket_bugreport": "Bug Report",
-};
+const { ticketCollection } = require("../../index");
 
-module.exports = async function (interaction) {
-    // Find existing ticket by channel topic
-    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.topic == interaction.user.id);
-    if (existingTicketChannel) {
-        return await interaction.reply({
+module.exports = async (interaction, ticketType) => {
+    const { openCategory } = await ticketCollection.findOne({ _id: 'categories' });
+
+    const existingTicket = await ticketCollection.findOne({ user: interaction.user.id, open: true });
+    if (existingTicket) {
+        interaction.reply({
             embeds: [
                 {
                     title: `You already have an open ticket!`,
-                    description: `<#${existingTicketChannel.id}>`,
+                    description: `<#${existingTicket.channel}>`,
                     color: 5094616
                 },
             ],
             ephemeral: true
         });
+
+        return null;
     }
+
+    // Generate ticket ID
+    const ticketId = Math.random().toString().substr(2, 6);
 
     // Create ticket channel
     const channel = await interaction.guild.channels.create({
-        name: `${ticketType[interaction.customId]}-${interaction.user.username}`,
-        topic: interaction.user.id,  // Channel topic: User ID
+        name: `ticket-${ticketId}`,
+        topic: `${interaction.user.username}'s ${ticketType} ticket`,
+        parent: openCategory,  // "Open" category
         permissionOverwrites: [
             {
                 id: interaction.guild.roles.everyone.id,
@@ -37,15 +39,29 @@ module.exports = async function (interaction) {
         ],
     });
 
-    // Defer interaction
-    interaction.deferUpdate();
+    ticketCollection.insertOne({ _id: ticketId, channel: channel.id, user: interaction.user.id, open: true, assignee: null });
+
+    interaction.reply({
+        embeds: [
+            {
+                title: "Ticket Created!",
+                description: `<#${channel.id}>`,
+                color: 5094616,
+                footer: {
+                    iconURL: 'https://i.imgur.com/kY65sQa.png',
+                    text: 'Limitless Reloaded',
+                },
+            },
+        ],
+        ephemeral: true
+    });
 
     // Ping user
     channel.send(`<@${interaction.user.id}>`)
         .then(m => m.delete());
 
     // Send ticket closure embed
-    await channel.send({
+    channel.send({
         embeds: [
             {
                 title: 'Close Ticket',
@@ -71,4 +87,6 @@ module.exports = async function (interaction) {
             },
         ],
     });
+
+    return channel;
 }

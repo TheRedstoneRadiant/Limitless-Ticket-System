@@ -1,4 +1,4 @@
-const { client } = require("../../index");
+const { client, ticketCollection } = require("../../index");
 
 const dmMessage = {
     content: "If you need any additional information or are still interested, send a DM to JohnWick#0002 or re-join Limitless Services here → https://discord.gg/7eEFyHnexS",
@@ -21,16 +21,16 @@ Feel free to reach out to me directly with any urgent matters. @JohnWick#0002`,
 };
 
 module.exports = async function (interaction) {
+    const { user } = await ticketCollection.findOne({channel: interaction.channel.id});
+
     // DM message
-    try {
-        const ticketOwner = await client.users.fetch(interaction.channel.topic, false);
-        await ticketOwner.send(dmMessage);
-    } catch {
-        // Unable to DM message
-    };
+    client.users.fetch(user, false)
+        .then(ticketOwner => ticketOwner.send(dmMessage))
+        .catch(_ => null);
 
     // TODO: Send Ticket Transcription
 
     // Delete Ticket
-    await interaction.channel.delete();
+    ticketCollection.updateOne({channel: interaction.channel.id}, {$set: {open: false}});
+    interaction.channel.delete();
 };

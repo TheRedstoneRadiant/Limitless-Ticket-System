@@ -14,12 +14,8 @@ module.exports = async function (interaction) {
                 components: [
                     {
                         type: 2,
-                        label: '',
+                        label: 'Yes',
                         style: 4,
-                        emoji: {
-                            id: null,
-                            name: "✅"
-                        },
                         custom_id: "close_ticket"
                     }
                 ],
