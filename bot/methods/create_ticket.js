@@ -1,60 +1,13 @@
-// Map buttons to ticket names
-const ticketType = {
-    "ticket_pricing": "Pricing",
-    "ticket_support": "Support"
-};
+const { ticketCollection } = require("../../index");
 
-const pricingEmbed = {
-    embeds: [
-        {
-            title: 'Pricing',
-            color: 5094616,
-            fields: [],
-            footer: {
-                iconURL: 'https://i.imgur.com/kY65sQa.png',
-                text: 'Limitless Reloaded',
-            }
-        }
-    ],
-    components: [
-        {
-            type: 1,
-            components: [
-                {
-                    disabled: true,
-                    type: 2,
-                    label: 'Back',
-                    style: 1,
-                    emoji: {
-                        id: null,
-                        name: "⬅️"
-                    },
-                    custom_id: "faq_back"
-                },
-                {
-                    type: 2,
-                    label: 'Next',
-                    style: 1,
-                    emoji: {
-                        id: null,
-                        name: "➡️"
-                    },
-                    custom_id: "faq_forward"
-                }
-            ],
-        },
-    ]
-};
-
-module.exports = async function (interaction) {
-    // Find existing ticket by channel topic
-    const existingTicketChannel = await interaction.guild.channels.cache.find(channel => channel.topic == interaction.user.id);
-    if (existingTicketChannel) {
+const createTicket = async (interaction, ticketType) => {
+    const existingTicket = await ticketCollection.findOne({ user: interaction.user.id });
+    if (existingTicket) {
         return await interaction.reply({
             embeds: [
                 {
                     title: `You already have an open ticket!`,
-                    description: `<#${existingTicketChannel.id}>`,
+                    description: `<#${existingTicket.channel}>`,
                     color: 5094616
                 },
             ],
@@ -62,10 +15,17 @@ module.exports = async function (interaction) {
         });
     }
 
+    // Fetch "Open" category
+    const { openCategory } = ticketCollection.findOne({ _id: 'categories' });
+console.log(openCategory)
+    // Generate ticket ID
+    const ticketId = Math.random().toString().substr(2, 6);
+
     // Create ticket channel
     const channel = await interaction.guild.channels.create({
-        name: `${ticketType[interaction.customId]}-${interaction.user.username}`,
-        topic: interaction.user.id,  // Channel topic: User ID
+        name: `ticket-${ticketId}`,
+        topic: `${interaction.user.username}'s ${ticketType} ticket`,
+        parent: openCategory,  // "Open" category
         permissionOverwrites: [
             {
                 id: interaction.guild.roles.everyone.id,
@@ -77,6 +37,8 @@ module.exports = async function (interaction) {
             }
         ],
     });
+
+    await ticketCollection.insertOne({ _id: ticketId, channel: channel.id, user: interaction.user.id, open: true, assignee: null });
 
     interaction.reply({
         embeds: [
@@ -125,10 +87,7 @@ module.exports = async function (interaction) {
         ],
     });
 
-    if (interaction.customId == "ticket_pricing") {
-        await channel.send(pricingEmbed);
-    }
-    else if (interaction.customId == "ticket_support") {
-        await channel.send("Please state your issue, our staff team will review you shortly.");
-    }
+    return channel;
 }
+
+module.exports = { createTicket };

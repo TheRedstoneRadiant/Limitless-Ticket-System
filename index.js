@@ -33,11 +33,6 @@ client.on('interactionCreate', async (interaction) => {
 	// Buttons
 	else if (interaction.isButton()) {
 		try {
-			// Ticket creation
-			if (interaction.customId.startsWith("ticket_")) {
-				return await require(`./bot/buttons/create_ticket`)(interaction);
-			}
-
 			// All other buttons
 			await require(`./bot/buttons/${interaction.customId}`)(interaction);
 		} catch (error) {
@@ -67,4 +62,4 @@ const pricingCollection = db.collection("pricingCollection");
 const ticketCollection = db.collection("ticketCollection");
 
 // Exports
-module.exports = { client, faqCollection };
+module.exports = { client, faqCollection, pricingCollection, ticketCollection };
