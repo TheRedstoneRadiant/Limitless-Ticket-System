@@ -33,7 +33,6 @@ client.on('interactionCreate', async (interaction) => {
 	// Buttons
 	else if (interaction.isButton()) {
 		try {
-			// All other buttons
 			await require(`./bot/buttons/${interaction.customId}`)(interaction);
 		} catch (error) {
 			console.log(`❌ Unable to execute ${interaction.customId} button. \n` + error);
@@ -63,3 +62,25 @@ const ticketCollection = db.collection("ticketCollection");
 
 // Exports
 module.exports = { client, faqCollection, pricingCollection, ticketCollection };
+
+// Ticket claim event
+const claimTicket = require("./bot/events/claimTicket");
+let openCategory;
+
+ticketCollection.findOne({ _id: 'categories' }).then(categories => {
+	openCategory = categories.openCategory;
+});
+
+// Listen for messages in open tickets
+client.on("messageCreate", async (message) => {
+	if (message.author.bot) return;
+
+	if (message.channel.parentId === openCategory) {  // Check if channel is an open ticket
+		
+		// Verify sure user isn't claiming their own ticket
+		const { user } = await ticketCollection.findOne({ channel: message.channel.id });
+		if (user !== message.author.id) {
+			await claimTicket(message);  // Claim ticket
+		}
+	}
+});

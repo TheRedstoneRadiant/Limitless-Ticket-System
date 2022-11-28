@@ -6,8 +6,8 @@ const { Client } = require("discord.js");
 // Predefined command array
 const commands = [
     {
-        "name": "createticketprompt",
-        "description": "Create ticket prompt.",
+        "name": "createsupportprompt",
+        "description": "Create support prompt.",
     }
 ];
 

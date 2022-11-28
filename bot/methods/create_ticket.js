@@ -1,9 +1,11 @@
 const { ticketCollection } = require("../../index");
 
-const createTicket = async (interaction, ticketType) => {
-    const existingTicket = await ticketCollection.findOne({ user: interaction.user.id });
+module.exports = async (interaction, ticketType) => {
+    const { openCategory } = await ticketCollection.findOne({ _id: 'categories' });
+
+    const existingTicket = await ticketCollection.findOne({ user: interaction.user.id, open: true });
     if (existingTicket) {
-        return await interaction.reply({
+        interaction.reply({
             embeds: [
                 {
                     title: `You already have an open ticket!`,
@@ -13,11 +15,10 @@ const createTicket = async (interaction, ticketType) => {
             ],
             ephemeral: true
         });
+
+        return null;
     }
 
-    // Fetch "Open" category
-    const { openCategory } = ticketCollection.findOne({ _id: 'categories' });
-console.log(openCategory)
     // Generate ticket ID
     const ticketId = Math.random().toString().substr(2, 6);
 
@@ -38,12 +39,12 @@ console.log(openCategory)
         ],
     });
 
-    await ticketCollection.insertOne({ _id: ticketId, channel: channel.id, user: interaction.user.id, open: true, assignee: null });
+    ticketCollection.insertOne({ _id: ticketId, channel: channel.id, user: interaction.user.id, open: true, assignee: null });
 
     interaction.reply({
         embeds: [
             {
-                title: "Ticket Created",
+                title: "Ticket Created!",
                 description: `<#${channel.id}>`,
                 color: 5094616,
                 footer: {
@@ -60,7 +61,7 @@ console.log(openCategory)
         .then(m => m.delete());
 
     // Send ticket closure embed
-    await channel.send({
+    channel.send({
         embeds: [
             {
                 title: 'Close Ticket',
@@ -75,7 +76,7 @@ console.log(openCategory)
                     {
                         type: 2,
                         label: 'Close',
-                        style: 4,
+                        style: 2,
                         emoji: {
                             id: null,
                             name: "🔒"
@@ -89,5 +90,3 @@ console.log(openCategory)
 
     return channel;
 }
-
-module.exports = { createTicket };

@@ -1,8 +1,10 @@
 const { pricingCollection } = require("../../index");
-const { createTicket } = require("../methods/create_ticket");
+const createTicket = require("../methods/create_ticket");
 
 module.exports = async (interaction) => {
     const ticketChannel = await createTicket(interaction, "Pricing");
+    
+    if (!ticketChannel) return;  // User already has an existing ticket
 
     // Fetch prices
     let prices = [];

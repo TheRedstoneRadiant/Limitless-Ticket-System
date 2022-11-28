@@ -24,16 +24,13 @@ module.exports = async function (interaction) {
     const { user } = await ticketCollection.findOne({channel: interaction.channel.id});
 
     // DM message
-    try {
-        const ticketOwner = await client.users.fetch(user, false);
-        await ticketOwner.send(dmMessage);
-    } catch {
-        // Unable to DM message
-    };
+    client.users.fetch(user, false)
+        .then(ticketOwner => ticketOwner.send(dmMessage))
+        .catch(_ => null);
 
     // TODO: Send Ticket Transcription
 
     // Delete Ticket
-    await ticketCollection.deleteOne({channel: interaction.channel.id});
-    await interaction.channel.delete();
+    ticketCollection.updateOne({channel: interaction.channel.id}, {$set: {open: false}});
+    interaction.channel.delete();
 };
