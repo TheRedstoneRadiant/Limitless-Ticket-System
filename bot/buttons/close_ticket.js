@@ -1,36 +1,21 @@
-const { client, ticketCollection } = require("../../index");
-
-const dmMessage = {
-    content: "If you need any additional information or are still interested, send a DM to JohnWick#0002 or re-join Limitless Services here → https://discord.gg/7eEFyHnexS",
-    embeds: [
-        {
-            url: 'https://discord.gg/7eEFyHnexS',
-            title: 'CLICK HERE to Get Back to Limitless Services',
-            description: `Thanks for your interest with Limitless Services.
-
-**Hope I could assist in whatever your goal was today!**
-Feel free to reach out to me directly with any urgent matters. @JohnWick#0002`,
-            color: 5094616,
-            footer: {
-                iconURL: 'https://i.imgur.com/kY65sQa.png',
-                text: 'Limitless Reloaded',
-            },
-            timestamp: new Date().toISOString()
-        }
-    ]
-};
+const { client, faqCollection, ticketCollection } = require("../../index");
+const createTranscript = require("../methods/generate_channel_transcript");
 
 module.exports = async function (interaction) {
-    const { user } = await ticketCollection.findOne({channel: interaction.channel.id});
+    const { dmMessage } = await faqCollection.findOne({_id: "dmMessage"})
+    const { user } = await ticketCollection.findOne({ channel: interaction.channel.id });
 
-    // DM message
+    // DM message & transcript
+    dmMessage.embeds[0].timestamp = new Date().toISOString(); // Set embed timestamp
+
+    const transcript = await createTranscript(interaction.channel);
+
+    // Fetch ticket owner
     client.users.fetch(user, false)
-        .then(ticketOwner => ticketOwner.send(dmMessage))
-        .catch(_ => null);
-
-    // TODO: Send Ticket Transcription
+        .then(ticketOwner => ticketOwner.send({...dmMessage, files: [transcript]})) // Send message
+        .catch(_ => null); // Failed to DM message
 
     // Delete Ticket
-    ticketCollection.updateOne({channel: interaction.channel.id}, {$set: {open: false}});
-    interaction.channel.delete();
+    ticketCollection.updateOne({ channel: interaction.channel.id }, { $set: { open: false } }); // Mark ticket as closed
+    interaction.channel.delete(); // Delete ticket channel
 };
