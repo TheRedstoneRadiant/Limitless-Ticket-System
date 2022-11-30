@@ -1,7 +1,7 @@
 const createTicket = require("../methods/create_ticket");
 
 module.exports = async (interaction) => {
-    const ticketChannel = createTicket(interaction, "Support");
+    const ticketChannel = await createTicket(interaction, "Support");
 
     if (!ticketChannel) return;  // User already has an existing ticket
 
